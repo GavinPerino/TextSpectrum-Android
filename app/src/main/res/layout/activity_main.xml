@@ -1,0 +1,6 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android" android:orientation="vertical" android:gravity="center" android:padding="24dp" android:layout_width="match_parent" android:layout_height="match_parent">
+<TextView android:text="TextSpectrum™ - Gavin Perino 2026" android:textSize="18sp" android:layout_width="wrap_content" android:layout_height="wrap_content"/>
+<Button android:id="@+id/enableBtn" android:text="1. Enable Keyboard" android:layout_width="match_parent" android:layout_height="wrap_content" android:layout_marginTop="24dp"/>
+<Button android:id="@+id/selectBtn" android:text="2. Select TextSpectrum" android:layout_width="match_parent" android:layout_height="wrap_content" android:layout_marginTop="12dp"/>
+</LinearLayout>
