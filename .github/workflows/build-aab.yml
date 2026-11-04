@@ -8,6 +8,9 @@ on:
 jobs:
   build:
     runs-on: ubuntu-latest
+    defaults:
+      run:
+        working-directory: TextSpectrum-Android
     steps:
       - uses: actions/checkout@v4
 
@@ -29,4 +32,4 @@ jobs:
         uses: actions/upload-artifact@v4
         with:
           name: app-debug-aab
-          path: app/build/outputs/bundle/debug/app-debug.aab
+          path: TextSpectrum-Android/app/build/outputs/bundle/debug/app-debug.aab
