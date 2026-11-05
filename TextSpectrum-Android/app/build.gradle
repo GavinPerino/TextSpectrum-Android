@@ -1,5 +1,7 @@
-plugins{id 'com.android.application'
+plugins {
+    id 'com.android.application'
 }
+
 android {
     namespace 'com.textspec.keyboard'
     compileSdk 34
@@ -17,6 +19,7 @@ android {
             minifyEnabled false
         }
     }
+
     compileOptions {
         sourceCompatibility JavaVersion.VERSION_17
         targetCompatibility JavaVersion.VERSION_17
