@@ -13,4 +13,6 @@ dependencyResolutionManagement {
     }
 }
 rootProject.name = "TextSpectrum-Android"
+
 include ':app'
+project(':app').projectDir = new File(settingsDir, '../app')
