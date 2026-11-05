@@ -9,7 +9,6 @@ jobs:
     runs-on: ubuntu-latest     
     defaults:       
       run:         
-        # Tells GitHub to execute ALL build commands natively inside this project folder
         working-directory: TextSpectrum-Android     
     steps:       
       - name: Checkout repository         
@@ -21,18 +20,16 @@ jobs:
           distribution: 'temurin'           
           java-version: '17'           
 
-      # This safely configures your background compiler engines
       - name: Setup Gradle
         uses: gradle/actions/setup-gradle@v3
 
-      # Runs the native layout assembly command
+      # Executes the compilation by explicitly invoking the app module subproject task
       - name: Build Debug AAB         
-        run: gradle bundleDebug --stacktrace       
+        run: gradle :app:bundleDebug --stacktrace       
 
       - name: Upload AAB         
         uses: actions/upload-artifact@v4         
         with:           
           name: app-debug-aab           
-          # Maps the exact generated directory location
           path: TextSpectrum-Android/app/build/outputs/bundle/debug/app-debug.aab           
           if-no-files-found: error
