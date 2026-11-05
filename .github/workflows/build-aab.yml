@@ -20,17 +20,16 @@ jobs:
           distribution: 'temurin'           
           java-version: '17'           
 
-      # Official Gradle setup that optimizes builds and unlocks the global 'gradle' command
       - name: Setup Gradle
         uses: gradle/actions/setup-gradle@v3
 
-      # Changed from "./gradlew" to global "gradle" since local wrapper doesn't exist
+      # This targets the app module directly to bypass folder sorting issues
       - name: Build Debug AAB         
-        run: gradle bundleDebug --stacktrace       
+        run: gradle :app:bundleDebug --stacktrace       
 
       - name: Upload AAB         
         uses: actions/upload-artifact@v4         
         with:           
           name: app-debug-aab           
-          path: TextSpectrum-Android/app/build/outputs/bundle/debug/app-debug.aab           
+          path: app/build/outputs/bundle/debug/app-debug.aab           
           if-no-files-found: error
