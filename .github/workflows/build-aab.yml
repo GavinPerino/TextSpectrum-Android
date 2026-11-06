@@ -37,4 +37,4 @@ jobs:
         with:           
           name: app-debug-aab           
           path: TextSpectrum-Android/app/build/outputs/bundle/debug/app-debug.aab           
-          if-no-files-found: error
+          if-no-files-found: error 
