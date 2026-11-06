@@ -7,9 +7,6 @@ on:
 jobs:   
   build:     
     runs-on: ubuntu-latest     
-    defaults:       
-      run:         
-        working-directory: TextSpectrum-Android     
     steps:       
       - name: Checkout repository         
         uses: actions/checkout@v4       
@@ -23,9 +20,17 @@ jobs:
       - name: Setup Gradle
         uses: gradle/actions/setup-gradle@v3
 
-      # Executes the compilation by explicitly invoking the app module subproject task
+      # Combines the loose code folder with the Gradle configuration directory automatically
+      - name: Unify Split Mobile Folders
+        run: |
+          mkdir -p TextSpectrum-Android/app
+          cp -r app/* TextSpectrum-Android/app/
+
+      # Navigate to the consolidated project folder and execute the compilation
       - name: Build Debug AAB         
-        run: gradle :app:bundleDebug --stacktrace       
+        run: |
+          cd TextSpectrum-Android
+          gradle :app:bundleDebug --stacktrace       
 
       - name: Upload AAB         
         uses: actions/upload-artifact@v4         
