@@ -20,13 +20,13 @@ jobs:
       - name: Setup Gradle
         uses: gradle/actions/setup-gradle@v3
 
-      # Combines the loose code folder with the Gradle configuration directory automatically
-      - name: Unify Split Mobile Folders
+      # Safely restructures the workspace to satisfy Gradle 9 rules
+      - name: Restructure Project Worktree
         run: |
           mkdir -p TextSpectrum-Android/app
           cp -r app/* TextSpectrum-Android/app/
 
-      # Navigate to the consolidated project folder and execute the compilation
+      # Executes compilation securely from the target folder
       - name: Build Debug AAB         
         run: |
           cd TextSpectrum-Android
@@ -37,4 +37,4 @@ jobs:
         with:           
           name: app-debug-aab           
           path: TextSpectrum-Android/app/build/outputs/bundle/debug/app-debug.aab           
-          if-no-files-found: error 
+          if-no-files-found: error
