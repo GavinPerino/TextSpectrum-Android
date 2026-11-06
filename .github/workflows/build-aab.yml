@@ -30,7 +30,7 @@ jobs:
       - name: Build Debug AAB         
         run: |
           cd TextSpectrum-Android
-          gradle :app:bundleDebug --stacktrace       
+          gradle :app:bundleDebug --info--stacktrace       
 
       - name: Upload AAB         
         uses: actions/upload-artifact@v4         

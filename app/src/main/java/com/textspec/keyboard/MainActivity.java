@@ -1,4 +1,4 @@
-package com.textspec.keyboard;
+package com.textspectrum.keyboard;
 
 import android.app.Activity;
 import android.content.Intent;
