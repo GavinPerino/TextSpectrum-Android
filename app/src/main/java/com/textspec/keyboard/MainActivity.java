@@ -20,3 +20,4 @@ public class MainActivity extends Activity {
             ((android.view.inputmethod.InputMethodManager) getSystemService(INPUT_METHOD_SERVICE)).showInputMethodPicker();
         });
     }
+}
