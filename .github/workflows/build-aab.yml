@@ -17,21 +17,25 @@ jobs:
           distribution: 'temurin'           
           java-version: '17'           
 
+      # Forces GitHub to run a stable Gradle 8 environment compatible with your app scripts
       - name: Setup Gradle
         uses: gradle/actions/setup-gradle@v3
+        with:
+          gradle-version: '8.9'
 
-      # Safely restructures the workspace to satisfy Gradle 9 rules
-      - name: Restructure Project Worktree
+      # Automatically aligns the loose project files into the expected module directory
+      - name: Unify Split Mobile Folders
         run: |
           mkdir -p TextSpectrum-Android/app
           cp -r app/* TextSpectrum-Android/app/
 
-      # Executes compilation securely from the target folder
+      # Compiles the AAB using clean, quiet logging
       - name: Build Debug AAB         
         run: |
           cd TextSpectrum-Android
-          gradle :app:bundleDebug --warning-mode=none       
+          gradle :app:bundleDebug --warning-mode=none     
 
+      # Collects the generated output binary package
       - name: Upload AAB         
         uses: actions/upload-artifact@v4         
         with:           
