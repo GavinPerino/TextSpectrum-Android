@@ -3,7 +3,7 @@ plugins {
 }
 
 android {
-    namespace 'com.textspec.keyboard'
+    namespace 'com.textspectrum.keyboard'
     compileSdk 34
 
     defaultConfig {
