@@ -1,44 +1,47 @@
-name: Build AAB   
+name: Build and Sign Production AAB
+
 on:
-  push:     
-    branches: [ main ]   
-  workflow_dispatch: 
+  push:
+    branches: [ main ]
+  workflow_dispatch:
 
-jobs:   
-  build:     
-    runs-on: ubuntu-latest     
-    steps:       
-      - name: Checkout repository         
-        uses: actions/checkout@v4       
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
 
-      - name: Set up JDK 17         
-        uses: actions/setup-java@v4         
-        with:           
-          distribution: 'temurin'           
-          java-version: '17'           
+      - name: Set up JDK 17
+        uses: actions/setup-java@v4
+        with:
+          distribution: 'temurin'
+          java-version: '17'
 
-      # Forces GitHub to run a stable Gradle 8 environment compatible with your app scripts
       - name: Setup Gradle
         uses: gradle/actions/setup-gradle@v3
         with:
           gradle-version: '8.9'
 
-      # Automatically aligns the loose project files into the expected module directory
       - name: Unify Split Mobile Folders
         run: |
           mkdir -p TextSpectrum-Android/app
           cp -r app/* TextSpectrum-Android/app/
 
-      # Compiles the AAB using clean, quiet logging
-      - name: Build Debug AAB         
+      # This step decrypts your base64 vault string into a temporary keystore file for signing
+      - name: Decode Keystore file
+        run: |
+          echo "${{ secrets.ANDROID_KEYSTORE_BASE64 }}" | base64 --decode > TextSpectrum-Android/app/keystore.jks
+
+      # Compiles the strict release production bundle
+      - name: Build Production Release AAB
         run: |
           cd TextSpectrum-Android
-          gradle :app:bundleDebug --warning-mode=none     
+          gradle :app:bundleRelease --warning-mode=none
 
-      # Collects the generated output binary package
-      - name: Upload AAB         
-        uses: actions/upload-artifact@v4         
-        with:           
-          name: app-debug-aab           
-          path: TextSpectrum-Android/app/build/outputs/bundle/debug/app-debug.aab           
+      - name: Upload Production AAB
+        uses: actions/upload-artifact@v4
+        with:
+          name: app-release-aab
+          path: TextSpectrum-Android/app/build/outputs/bundle/release/app-release.aab
           if-no-files-found: error
