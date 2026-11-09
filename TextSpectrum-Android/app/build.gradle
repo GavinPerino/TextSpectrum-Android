@@ -7,16 +7,26 @@ android {
     compileSdk 34
 
     defaultConfig {
-        applicationId 'com.textspec.keyboard'
+        applicationId 'com.textspectrum.keyboard'
         minSdk 24
         targetSdk 34
         versionCode 1
         versionName '1.0'
     }
 
+    signingConfigs {
+        release {
+            storeFile file("keystore.jks")
+            storePassword System.getenv("ANDROID_KEYSTORE_PASSWORD")
+            keyAlias System.getenv("ANDROID_KEY_ALIAS")
+            keyPassword System.getenv("ANDROID_KEY_PASSWORD")
+        }
+    }
+
     buildTypes {
         release {
             minifyEnabled false
+            signingConfig signingConfigs.release
         }
     }
 
