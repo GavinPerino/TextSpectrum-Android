@@ -28,9 +28,9 @@ jobs:
           mkdir -p TextSpectrum-Android/app
           cp -r app/* TextSpectrum-Android/app/
 
-      - name: Decode Keystore file
+            - name: Decode Keystore file
         run: |
-          echo "${{ secrets.ANDROID_KEYSTORE_BASE64 }}" | base64 --decode > TextSpectrum-Android/app/keystore.jks
+          echo "${{ secrets.ANDROID_KEYSTORE_BASE64 }}" | tr -d '[:space:]' | base64 -d > TextSpectrum-Android/app/keystore.jks
 
       - name: Build Production Release AAB
         env:
