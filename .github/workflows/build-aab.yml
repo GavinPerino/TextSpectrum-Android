@@ -28,13 +28,11 @@ jobs:
           mkdir -p TextSpectrum-Android/app
           cp -r app/* TextSpectrum-Android/app/
 
-      # This step decrypts your base64 vault string into a temporary keystore file for signing
       - name: Decode Keystore file
         run: |
           echo "${{ secrets.ANDROID_KEYSTORE_BASE64 }}" | base64 --decode > TextSpectrum-Android/app/keystore.jks
 
-      # Compiles the strict release production bundle
-            - name: Build Production Release AAB
+      - name: Build Production Release AAB
         env:
           ANDROID_KEYSTORE_PASSWORD: ${{ secrets.ANDROID_KEYSTORE_PASSWORD }}
           ANDROID_KEY_ALIAS: ${{ secrets.ANDROID_KEY_ALIAS }}
@@ -42,7 +40,8 @@ jobs:
         run: |
           cd TextSpectrum-Android
           gradle :app:bundleRelease --warning-mode=none
- - name: Upload Production AAB
+
+      - name: Upload Production AAB
         uses: actions/upload-artifact@v4
         with:
           name: app-release-aab
