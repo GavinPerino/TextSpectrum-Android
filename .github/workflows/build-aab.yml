@@ -28,9 +28,21 @@ jobs:
           mkdir -p TextSpectrum-Android/app
           cp -r app/* TextSpectrum-Android/app/
 
-      - name: Decode Keystore file
+      - name: Generate Production Keystore
+        env:
+          ANDROID_KEYSTORE_PASSWORD: ${{ secrets.ANDROID_KEYSTORE_PASSWORD }}
+          ANDROID_KEY_ALIAS: ${{ secrets.ANDROID_KEY_ALIAS }}
+          ANDROID_KEY_PASSWORD: ${{ secrets.ANDROID_KEY_PASSWORD }}
         run: |
-          echo "${{ secrets.ANDROID_KEYSTORE_BASE64 }}" | tr -d '[:space:]' | base64 -d > TextSpectrum-Android/app/keystore.jks
+          keytool -genkeypair -v \
+            -keystore TextSpectrum-Android/app/keystore.jks \
+            -alias "$ANDROID_KEY_ALIAS" \
+            -keyalg RSA \
+            -keysize 2048 \
+            -validity 10000 \
+            -storepass "$ANDROID_KEYSTORE_PASSWORD" \
+            -keypass "$ANDROID_KEY_PASSWORD" \
+            -dname "CN=Gavin Perino, OU=Development, O=TextSpectrum, L=Jeffreys Bay, ST=Eastern Cape, C=ZA"
 
       - name: Build Production Release AAB
         env:
@@ -46,4 +58,11 @@ jobs:
         with:
           name: app-release-aab
           path: TextSpectrum-Android/app/build/outputs/bundle/release/app-release.aab
+          if-no-files-found: error
+
+      - name: Upload Keystore Backup
+        uses: actions/upload-artifact@v4
+        with:
+          name: production-keystore-backup
+          path: TextSpectrum-Android/app/keystore.jks
           if-no-files-found: error
