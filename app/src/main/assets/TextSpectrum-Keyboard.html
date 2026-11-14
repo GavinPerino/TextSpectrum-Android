@@ -375,7 +375,7 @@
 }
   </style>
 </head>
-<body>
+<body onclick="if(!event.target.closest('#kb, #message-input, #send-btn')){document.getElementById('kb').style.display='none'}">
 
   <!-- TextSpectrum header – rainbow/spectrum icon far left (as in original coding) -->
   <div class="ts-header">
@@ -448,10 +448,10 @@
       <div class="prism-wrapper">
         <img src="messaging-bar-icon.png" class="prism-icon" id="messaging-bar-icon" alt="Prism"
              onerror="this.style.display='none'; this.insertAdjacentHTML('afterend','<span id=\'msg-icon-fallback\' style=\'position:absolute;left:10px;font-size:22px;cursor:pointer;z-index:2\'>◈</span>');">
-        <textarea id="message-input" rows="1" placeholder="Type to refract..." autocomplete="off"
+        <textarea id="message-input" onclick="document.getElementById('kb').style.display='block'" rows="1" placeholder="Type to refract..." autocomplete="off"
                   inputmode="none" enterkeyhint="send"></textarea>
       </div>
-      <button id="send-btn">Send</button>
+      <button id="send-btn" onclick="document.getElementById('kb').style.display='none'">Send</button>
     </div>
 
     <!-- Special keyboard top banner (hidden by default) -->
@@ -468,7 +468,7 @@
     </div>
 
     <!-- Custom Keyboard -->
-    <div id="kb">
+    <div id="kb" style="display:none">
       <div id="p1">
         <div class="row">
           <div class="key" data-c="q" data-s="1"><span class="b">q</span><span class="s">1</span></div>
