@@ -1,0 +1,26 @@
+{
+  "name": "TextSpectrum™",
+  "short_name": "TextSpectrum",
+  "description": "Colour-driven clarity engine - choose intent, not just words. Patent Pending.",
+  "start_url": "/TextSpectrum-Android/app/src/main/assets/TextSpectrum-Keyboard.html",
+  "scope": "/TextSpectrum-Android/",
+  "id": "/TextSpectrum-Android/app/src/main/assets/TextSpectrum-Keyboard.html",
+  "display": "standalone",
+  "background_color": "#0f0f12",
+  "theme_color": "#7c4dff",
+  "orientation": "portrait",
+  "icons": [
+    {
+      "src": "app/src/main/assets/messaging-bar-icon.png",
+      "sizes": "192x192",
+      "type": "image/png",
+      "purpose": "any"
+    },
+    {
+      "src": "app/src/main/assets/messaging-bar-icon.png",
+      "sizes": "512x512",
+      "type": "image/png",
+      "purpose": "any maskable"
+    }
+  ]
+}
