@@ -53,11 +53,27 @@ jobs:
           cd TextSpectrum-Android
           gradle :app:bundleRelease --warning-mode=none
 
+      - name: Build Production Release APK
+        env:
+          ANDROID_KEYSTORE_PASSWORD: ${{ secrets.ANDROID_KEYSTORE_PASSWORD }}
+          ANDROID_KEY_ALIAS: ${{ secrets.ANDROID_KEY_ALIAS }}
+          ANDROID_KEY_PASSWORD: ${{ secrets.ANDROID_KEY_PASSWORD }}
+        run: |
+          cd TextSpectrum-Android
+          gradle :app:assembleRelease --warning-mode=none
+
       - name: Upload Production AAB
         uses: actions/upload-artifact@v4
         with:
           name: app-release-aab
           path: TextSpectrum-Android/app/build/outputs/bundle/release/app-release.aab
+          if-no-files-found: error
+
+      - name: Upload Production APK
+        uses: actions/upload-artifact@v4
+        with:
+          name: app-release-apk
+          path: TextSpectrum-Android/app/build/outputs/apk/release/app-release.apk
           if-no-files-found: error
 
       - name: Upload Keystore Backup
