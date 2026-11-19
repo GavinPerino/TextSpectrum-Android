@@ -28,7 +28,7 @@ public class TextSpectrumKeyboardService extends InputMethodService {
         // Bridge: HTML can call AndroidKeyboard.sendKey("a")
         webView.addJavascriptInterface(new KeyboardBridge(), "AndroidKeyboard");
         // Load your local file, no internet
-        webView.loadUrl("file:///android_asset/keyboard.html");
+        webView.loadUrl("file:///android_asset/TextSpectrum-Keyboard.html");
         return webView;
     }
 
