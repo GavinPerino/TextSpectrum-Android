@@ -8,7 +8,7 @@ import android.view.View;
 
 public class ColorStripView extends View {
     private Paint paint = new Paint();
-    private int[] colors = {0xFFFFFFFF, 0xFFFF0000, 0xFFFF8800, 0xFFFFFF00, 0xFF00FF00, 0xFF0000FF, 0xFF4B0082, 0xFFEE82EE};
+    private int[] colors = {0xFFFFFFFF, 0xFFFF0000, 0xFFFF8800, 0xFFFFFF00, 0xFF00FF00, 0xFF0000FF, 0xFF4B0082, 0xFF8A2BE2};
 
     private OnColorSelectedListener listener;
 

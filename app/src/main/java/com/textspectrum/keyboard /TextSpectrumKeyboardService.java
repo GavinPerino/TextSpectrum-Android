@@ -1,27 +1,65 @@
 package com.textspectrum.keyboard;
+
 import android.inputmethodservice.InputMethodService;
-import android.inputmethodservice.Keyboard;
-import android.inputmethodservice.KeyboardView;
 import android.view.View;
 import android.view.inputmethod.InputConnection;
-public class TextSpectrumKeyboardService extends InputMethodService implements KeyboardView.OnKeyboardActionListener {
-    private KeyboardView kv; private Keyboard keyboard; private ColorStripView colorStrip;
+import android.webkit.JavascriptInterface;
+import android.webkit.WebSettings;
+import android.webkit.WebView;
+import android.webkit.WebViewClient;
+
+public class TextSpectrumKeyboardService extends InputMethodService {
+
+    private WebView webView;
     private int currentColor = 0xFF000000;
-    private final int[] colors = {0xFFFFFFFF, 0xFFFF0000, 0xFFFFA500, 0xFFFFFF00, 0xFF00FF00, 0xFF0000FF, 0xFF4B0082, 0xFF8A2BE2};
-    @Override public View onCreateInputView() {
-        View root = getLayoutInflater().inflate(R.layout.keyboard_view, null);
-        kv = root.findViewById(R.id.keyboardView);
-        colorStrip = root.findViewById(R.id.colorStrip);
-        keyboard = new Keyboard(this, R.xml.qwerty);
-        kv.setKeyboard(keyboard); kv.setOnKeyboardActionListener(this);
-        colorStrip.setColors(colors); colorStrip.setOnColorSelectedListener(c -> currentColor = c);
-        return root;
+
+    @Override
+    public View onCreateInputView() {
+        webView = new WebView(this);
+        WebSettings s = webView.getSettings();
+        s.setJavaScriptEnabled(true);
+        // OFFLINE LOCKS - keeps your privacy policy true
+        s.setBlockNetworkLoads(true);
+        s.setBlockNetworkImage(true);
+        s.setAllowFileAccess(true);
+        s.setAllowContentAccess(false);
+
+        webView.setWebViewClient(new WebViewClient());
+        // Bridge: HTML can call AndroidKeyboard.sendKey("a")
+        webView.addJavascriptInterface(new KeyboardBridge(), "AndroidKeyboard");
+        // Load your local file, no internet
+        webView.loadUrl("file:///android_asset/keyboard.html");
+        return webView;
     }
-    @Override public void onKey(int primaryCode, int[] keyCodes) {
-        InputConnection ic = getCurrentInputConnection(); if (ic==null) return;
-        if(primaryCode==Keyboard.KEYCODE_DELETE){ ic.deleteSurroundingText(1,0); }
-        else if(primaryCode==Keyboard.KEYCODE_DONE){ ic.sendKeyEvent(new android.view.KeyEvent(android.view.KeyEvent.ACTION_DOWN, android.view.KeyEvent.KEYCODE_ENTER)); }
-        else { char code=(char)primaryCode; ic.commitText(String.valueOf(code),1); }
+
+    // This is what talks to WhatsApp, exactly like Gboard does
+    public class KeyboardBridge {
+        @JavascriptInterface
+        public void sendKey(String text) {
+            InputConnection ic = getCurrentInputConnection();
+            if (ic != null) ic.commitText(text, 1);
+        }
+        @JavascriptInterface
+        public void deleteKey() {
+            InputConnection ic = getCurrentInputConnection();
+            if (ic != null) ic.deleteSurroundingText(1, 0);
+        }
+        @JavascriptInterface
+        public void enterKey() {
+            InputConnection ic = getCurrentInputConnection();
+            if (ic != null) ic.sendKeyEvent(new android.view.KeyEvent(
+                android.view.KeyEvent.ACTION_DOWN,
+                android.view.KeyEvent.KEYCODE_ENTER));
+        }
+        @JavascriptInterface
+        public void setColor(String hex) {
+            try { currentColor = (int)Long.parseLong(hex.replace("#",""), 16) | 0xFF000000; } catch (Exception e) {}
+        }
     }
-    @Override public void onPress(int p){} @Override public void onRelease(int p){} @Override public void onText(CharSequence t){} @Override public void swipeLeft(){} @Override public void swipeRight(){} @Override public void swipeDown(){} @Override public void swipeUp(){}
+
+    @Override
+    public void onDestroy() {
+        if (webView != null) webView.destroy();
+        super.onDestroy();
+    }
 }
